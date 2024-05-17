@@ -14,5 +14,23 @@
     "cors": "^2.8.5",
     "express": "^4.19.2",
     "mongodb": "^5.9.2"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Antony Caíque",
+      "url": "https://github.com/Antony-Oliveira/"
+    },
+    {
+      "name": "Breno Nogueira",
+      "url": "https://github.com/BrenooNogg/"
+    },
+    {
+      "name": "André Lima",
+      "url": "https://github.com/AndredsLima/"
+    },
+    {
+      "name": "Emanuel Duann",
+      "url": "https://github.com/emanuelduann/"
+    }
+  ]
 }
