@@ -14,25 +14,28 @@ const { default: axios } = require("axios");
 const app     = express();
 const port    = 3000; // porta padrão
 
+const jwt = require('jsonwebtoken');
+const { eAdmin } = require("./middlewares/auth");
+
 // Serialização do JSON
 app.use(require('cors')());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-
 // Definindo rota de teste
 const router  = express.Router();
-router.get('/', (req, res) => res.json({message: 'Rota de teste OK!'}));
+router.get('/', (req, res) => {
+    res.json({message: 'Rota de teste OK!'})
+});
 
 //API REST cliente
 
-// GET
+// Listar Usuários
 router.get('/cliente/:id?', async function(req, res, next){
     try{
         const db  = await connect();
         if(req.params.id){
-         res.json(await db.collection("cliente").findOne({_id: new ObjectId(req.params.id)}));
-
+            res.json(await db.collection("cliente").findOne({_id: new ObjectId(req.params.id)}));
         }else{
          res.json(await db.collection("cliente").find().toArray());
         }
@@ -42,21 +45,25 @@ router.get('/cliente/:id?', async function(req, res, next){
         res.status(400).json({erro: `${ex}`});
     }
 });
+    
 
+// Rota de Login
 router.post('/login', async function(req, res, next){
     try {
         const { email, password } = req.body;
+        const secret = 'D62ST92Y7A6V7K5C6W9ZU6W8KS3';
         const db = await connect();
         
         // Verifique se o usuário com o email e senha fornecidos existe no banco de dados
         const user = await db.collection("cliente").findOne({ email, password });
         
         if (user) {
+            const token = jwt.sign({id: user._id}, secret, {expiresIn: '1h'});
             // Se o usuário existe, envie os detalhes do usuário como resposta
-            res.status(200).json(user);
+            res.status(200).json({user, token, msg:'So sucesso'})
         } else {
             // Se as credenciais estiverem incorretas, envie uma mensagem de erro
-            res.status(401).json({ message: "Credenciais inválidas" });
+            res.status(401).json({ message: "Credenciais inválidas" }, );
         }
     } catch(ex) {
         console.error(ex);
@@ -74,7 +81,6 @@ router.post('/cliente', async function(req, res, next){
         console.log(ex)
         res.status(400).json({erro: `${ex}`});
     }
-
 });
 
 // PUT
