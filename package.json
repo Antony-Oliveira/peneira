@@ -19,5 +19,23 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
-  }
+  },
+  "contributors": [
+    {
+      "name": "Antony Caíque",
+      "url": "https://github.com/Antony-Oliveira/"
+    },
+    {
+      "name": "Breno Nogueira",
+      "url": "https://github.com/BrenooNogg/"
+    },
+    {
+      "name": "André Lima",
+      "url": "https://github.com/AndredsLima/"
+    },
+    {
+      "name": "Emanuel Duann",
+      "url": "https://github.com/emanuelduann/"
+    }
+  ]
 }
