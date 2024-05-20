@@ -15,7 +15,6 @@ const app     = express();
 const port    = 3000; // porta padrão
 
 const jwt = require('jsonwebtoken');
-const { eAdmin } = require("./middlewares/auth");
 
 // Serialização do JSON
 app.use(require('cors')());
@@ -34,10 +33,11 @@ router.get('/', (req, res) => {
 router.get('/cliente/:id?', async function(req, res, next){
     try{
         const db  = await connect();
+        const query = {_id: new ObjectId(req.params.id)};
         if(req.params.id){
-            res.json(await db.collection("cliente").findOne({_id: new ObjectId(req.params.id)}));
+            return res.json(await db.collection("cliente").findOne(query));
         }else{
-         res.json(await db.collection("cliente").find().toArray());
+            return res.json(await db.collection("cliente").find().toArray());
         }
     }
     catch(ex){
@@ -45,8 +45,6 @@ router.get('/cliente/:id?', async function(req, res, next){
         res.status(400).json({erro: `${ex}`});
     }
 });
-    
-
 // Rota de Login
 router.post('/login', async function(req, res, next){
     try {
@@ -60,7 +58,9 @@ router.post('/login', async function(req, res, next){
         if (user) {
             const token = jwt.sign({id: user._id}, secret, {expiresIn: '1h'});
             // Se o usuário existe, envie os detalhes do usuário como resposta
-            res.status(200).json({user, token, msg:'So sucesso'})
+            
+            res.status(200).json({user, token, msg:'So sucesso'});
+
         } else {
             // Se as credenciais estiverem incorretas, envie uma mensagem de erro
             res.status(401).json({ message: "Credenciais inválidas" }, );
@@ -88,7 +88,10 @@ router.put('/cliente/:id', async function(req, res, next){
     try{
       const cliente = req.body;
       const db = await connect();
-      res.json(await db.collection("cliente").updateOne({_id: new ObjectId(req.params.id)}, {$set: cliente}));
+      let query = {_id: new ObjectId(req.params.id)}
+      const user = await db.collection("cliente").findOne(query);
+      
+      res.json(user);
     }
     catch(ex){
       console.log(ex);
@@ -99,8 +102,10 @@ router.put('/cliente/:id', async function(req, res, next){
 // DELETE
 router.delete('/cliente/:id', async function(req, res, next){
     try{
-      const db = await connect();
-      res.json(await db.collection("cliente").deleteOne({_id: new ObjectId(req.params.id)}));
+    const db = await connect();
+    const user = await db.collection("cliente").deleteOne({_id: new ObjectId(req.params.id)});
+    
+      res.json(user);
     }catch(ex){
       console.log(ex);
       res.status(400).json({erro: `${ex}`});

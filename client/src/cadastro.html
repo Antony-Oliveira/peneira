@@ -32,17 +32,17 @@
             <h1 class="mb-5 fw-normal">Create Account</h1>
 
             <div class="form-floating"> 
-                <input type="text" class="form-control" id="user" placeholder="User"/>
+                <input type="text" class="form-control" id="user" value="exemplo" placeholder="User"/>
                 <label for="user">User </label>
             </div>
 
             <div class="form-floating my-4"> 
-                <input type="email" class="form-control" id="email" placeholder="Email address"/>
+                <input type="email" class="form-control" id="email" value="exemplo@gmail.com" placeholder="Email address"/>
                 <label for="email">Email address</label>
             </div>
 
             <div class="form-floating"> 
-                <input type="password" class="form-control" id="password" placeholder="Password"/>
+                <input type="password" class="form-control" id="password" value="exemplo" placeholder="Password"/>
                 <label for="password">Password</label>
             </div>
             <div id="errorMessage" class="error-message"></div>
@@ -83,9 +83,9 @@
                 successMessage.textContent = "Cadastro realizado com sucesso!";
                 // Limpar os campos do formulário
                 form.reset();
-                setTimeout(() => {
-                    window.location.href = 'Login.html'
-                }, 1500);
+                // setTimeout(() => {
+                //     window.location.href = 'Login.html'
+                // }, 1500);
             } catch (error) {
                 console.error('Erro ao cadastrar:', error);
                 errorMessage.textContent = "Erro ao cadastrar. Por favor, tente novamente mais tarde.";
