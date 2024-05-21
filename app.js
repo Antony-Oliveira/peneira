@@ -71,13 +71,17 @@ router.post('/login', async function(req, res, next){
     }
 });
 
-// POST
+// POST - CADASTRO
 router.post('/cliente', async function(req, res, next){
     try{
         const cliente = req.body;
         cliente.position = 'indefinida';
         const db  = await connect();
-        res.json(await db.collection("cliente").insertOne(cliente))
+        const query = await db.collection("cliente").findOne({email: cliente.email});
+        if(query){
+            return res.status(400).json({erro: "Usuário já cadastrado"});
+        }
+        res.status(201).json(await db.collection("cliente").insertOne(cliente))
     }catch(ex){
         console.log(ex)
         res.status(400).json({erro: `${ex}`});
