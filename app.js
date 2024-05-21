@@ -86,12 +86,12 @@ router.post('/cliente', async function(req, res, next){
 // PUT
 router.put('/cliente/:id', async function(req, res, next){
     try{
-      const cliente = req.body;
-      const db = await connect();
-      let query = {_id: new ObjectId(req.params.id)}
-      const user = await db.collection("cliente").findOne(query);
-      
-      res.json(user);
+        const cliente = req.body;
+        const db = await connect();
+        let query = {_id: new ObjectId(req.params.id)}
+        const user = await db.collection("cliente").updateOne(query, {$set: cliente});
+        res.status(200).json(user);
+       
     }
     catch(ex){
       console.log(ex);

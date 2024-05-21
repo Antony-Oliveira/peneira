@@ -83,9 +83,9 @@
                 successMessage.textContent = "Cadastro realizado com sucesso!";
                 // Limpar os campos do formulário
                 form.reset();
-                // setTimeout(() => {
-                //     window.location.href = 'Login.html'
-                // }, 1500);
+                setTimeout(() => {
+                   window.location.href = 'Login.html'
+                 }, 1000);
             } catch (error) {
                 console.error('Erro ao cadastrar:', error);
                 errorMessage.textContent = "Erro ao cadastrar. Por favor, tente novamente mais tarde.";
