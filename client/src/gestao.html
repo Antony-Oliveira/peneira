@@ -33,6 +33,7 @@
                   <tr>
                     <th>Opções</th>
                     <th scope="col">Nome</th>
+                    <th scope="col">Posição</th>
                     <th scope="col">E-mail</th>
                   </tr>
                 </thead>
@@ -53,7 +54,6 @@
         </div>
     </div>
 
-
     <!-- Modal de Edição do Cliente -->
     <div class="modal fade" id="editarClienteModal" tabindex="-1" aria-labelledby="editarClienteModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -65,12 +65,28 @@
             <div class="modal-body">
             <form id="editarClienteForm">
                 <div class="mb-3">
-                <label for="editNome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="editNome" name="editNome" required>
+                    <label for="editNome" class="form-label">Nome</label>
+                    <input type="text" class="form-control" id="editNome" name="editNome" required>
                 </div>
                 <div class="mb-3">
-                <label for="editEmail" class="form-label">E-mail</label>
-                <input type="email" class="form-control" id="editEmail" name="editEmail" required>
+                    <label for="editEmail" class="form-label">E-mail</label>
+                    <input type="email" class="form-control" id="editEmail" name="editEmail" required>  
+                </div>
+                <div class="mb-3">
+                    <label for="position" class="form-label">Posição em Campo</label>
+                    <select name="position" id="position">
+                        <option value="indefinido" selected disabled>Posição no campo</option>
+                        <option value="GO">GOLEIRO</option>
+                        <option value="ZAG">ZAGUEIRO</option>
+                        <option value="LE">LATERAL ESQUERDA</option>
+                        <option value="LD">LATERAL DIREITA</option>
+                        <option value="VOL">VOLANTE</option>
+                        <option value="MD">MEIA DIREITA</option>
+                        <option value="ME">MEIA ESQUERDA</option>
+                        <option value="PD">PONTA DIREITA</option>
+                        <option value="PE">PONTA ESQUERDA</option>
+                        <option value="AT">ATACANTE</option>
+                    </select>
                 </div>
                 <input type="hidden" id="editClientId" name="editClientId">
             </form>
@@ -109,27 +125,23 @@
                                 '<a class="btn btn-outline-danger btn-sm" href="#" role="button" onclick="javascript:return excluirCliente(`'+resp._id+'`);">Excluir</a>' +
                             '</td>' +
                             '<td>'+ resp.user +'</td>' +
+                            '<td>'+ resp.position +'</td>'  +
                             '<td>'+ resp.email +'</td>'  +
                             '</tr>')}
                         ).join('');
                     }).catch(err => document.querySelector('#output').innerHTML = '<div class="alert alert-danger" role="alert">'+ err.message +'</div>')
                 }
         function excluirCliente(id){
-            axios.delete(`http://localhost:3000/cliente/${id}`, 
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}` // Inclui o token JWT no cabeçalho de autorização
-                    }
-                }
-            ).then((response) => {
+            axios.delete(`http://localhost:3000/cliente/${id}`).then((response) => {
                 console.log(response)
                 window.location.reload();
             }); 
         }
-        function abrirModalEdicao(id, nome, email) {
+        function abrirModalEdicao(id, nome, email, position = 'indefinido') {
             document.getElementById('editClientId').value = id;
             document.getElementById('editNome').value = nome;
             document.getElementById('editEmail').value = email;
+            document.getElementById('position').value = position;
             let modal = new bootstrap.Modal(document.getElementById('editarClienteModal'));
             modal.show();
         }
@@ -138,27 +150,28 @@
             let id = document.getElementById('editClientId').value;
             let nome = document.getElementById('editNome').value;
             let email = document.getElementById('editEmail').value;
+            let position = document.getElementById('position').value;
+            
 
             axios.put(`http://localhost:3000/cliente/${id}`, {
-                userId: id,
-                user: nome,
-                email: email
-            },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            } 
-            )
-            .then((response) => {
-                console.log(response);
-                window.location.reload(); // Recarrega a página após a edição
-            })
-            .catch((error) => {
-                console.error(error);
-                alert("Erro ao editar cliente. Verifique o console para mais detalhes.");
-            });
-        }
+                    userId: id,
+                    user: nome,
+                    email: email,
+                    position: position,
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then((response) => {
+                    console.log(response.data);
+                    window.location.reload(); 
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert("Erro ao editar cliente. Verifique o console para mais detalhes.");
+                });
+            }
                 
 
         verificarAutenticacao(); 

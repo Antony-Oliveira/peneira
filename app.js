@@ -75,6 +75,7 @@ router.post('/login', async function(req, res, next){
 router.post('/cliente', async function(req, res, next){
     try{
         const cliente = req.body;
+        cliente.position = 'indefinida';
         const db  = await connect();
         res.json(await db.collection("cliente").insertOne(cliente))
     }catch(ex){
