@@ -8,20 +8,19 @@ if(!conn) return new Error("Erro na conexão");
     return global.db;
 }
 
-// Configuração do Express JS
 const express = require('express');
 const { default: axios } = require("axios");
 const app     = express();
-const port    = 3000; // porta padrão
+const port    = 3000; 
 
 const jwt = require('jsonwebtoken');
 
-// Serialização do JSON
+
 app.use(require('cors')());
 app.use(express.urlencoded({extended: true}));
 app.use(express.json());
 
-// Definindo rota de teste
+
 const router  = express.Router();
 router.get('/', (req, res) => {
     res.json({message: 'Rota de teste OK!'})
